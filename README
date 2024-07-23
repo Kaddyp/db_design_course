@@ -1,0 +1,24 @@
+Designing a database for courses with categories involves creating tables that can efficiently store information about courses and their associated categories. Below is a basic design with essential tables and their relationships:
+
+Tables
+    Category
+    Course
+    CourseCategory (junction table for many-to-many relationship between Course and Category)
+Table Definitions
+Category Table
+`    category_id (Primary Key)
+    name (Category name)
+    description (Category description)`
+Course Table
+    course_id (Primary Key)
+    title (Course title)
+    description (Course description)
+    start_date (Course start date)
+    end_date (Course end date)
+    instructor (Course instructor name)
+CourseCategory Table
+    course_id (Foreign Key referencing Course)
+    category_id (Foreign Key referencing Category)
+Relationships
+    A Course can belong to multiple Categories.
+    A Category can have multiple Courses.

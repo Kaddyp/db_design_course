@@ -1,0 +1,52 @@
+-- Insert categories
+INSERT INTO Category (name, description) VALUES
+('Computer Science', 'Courses related to computer science'),
+('Mathematics', 'Courses related to mathematics'),
+('Literature', 'Courses related to literature');
+
+-- Insert courses
+INSERT INTO Course (title, description, start_date, end_date, instructor) VALUES
+('Introduction to Computer Science', 'Basics of computer science', '2024-09-01', '2024-12-15', 'John Doe'),
+('Calculus I', 'Fundamentals of calculus', '2024-09-01', '2024-12-15', 'Jane Smith'),
+('English Literature', 'Study of English literature', '2024-09-01', '2024-12-15', 'Emily Johnson');
+
+-- Assign courses to categories
+INSERT INTO CourseCategory (course_id, category_id) VALUES
+(1, 1), -- 'Introduction to Computer Science' belongs to 'Computer Science'
+(2, 2), -- 'Calculus I' belongs to 'Mathematics'
+(3, 3), -- 'English Literature' belongs to 'Literature'
+(1, 2); -- 'Introduction to Computer Science' also belongs to 'Mathematics'
+
+-- Retrieve all courses in a specific category
+SELECT c.title, c.description, c.start_date, c.end_date, c.instructor
+FROM Course c
+JOIN CourseCategory cc ON c.course_id = cc.course_id
+JOIN Category cat ON cc.category_id = cat.category_id
+WHERE cat.name = 'Computer Science';
+
+SELECT cat.name, cat.description
+FROM Category cat
+JOIN CourseCategory cc ON cat.category_id = cc.category_id
+JOIN Course c ON cc.course_id = c.course_id
+WHERE c.title = 'Introduction to Computer Science';
+
+--SQL Query to Update a Category
+UPDATE Category
+SET name = 'New Category Name', description = 'Updated description for the category'
+WHERE category_id = 1;
+
+
+--Example with Error Handling
+START TRANSACTION;
+
+UPDATE Category
+SET name = 'Data Science', description = 'Courses related to data science'
+WHERE category_id = 1;
+
+-- Check if the update was successful
+IF ROW_COUNT() = 0 THEN
+    ROLLBACK;
+    SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Update failed: category_id not found';
+ELSE
+    COMMIT;
+END IF;
